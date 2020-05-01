@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Book;
+use App\Payment;
 use Illuminate\Http\Request;
 
-class BookController extends Controller
+class PaymentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +14,8 @@ class BookController extends Controller
      */
     public function index()
     {
-        $books = Book::get();
-        return response()->json($books);
+        $payments = Payment::get();
+        return response()->json($payments);
     }
 
     /**
@@ -36,14 +36,9 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        $book = new Book;
-        $book->title = $request->title;
-        $book->category_id = $request->category_id;
-        $book->author_id = $request->author_id;
-        $book->publisher_id = $request->publisher_id;
-        $book->stock = $request->stock;
-        $book->price = $request->price;
-        $book->save();
+        $payment = new Payment;
+        $payment->name = $request->name;
+        $payment->save();
         return response()->json($request);
     }
 
@@ -55,8 +50,8 @@ class BookController extends Controller
      */
     public function show($id)
     {
-        $book = Book::findOrFail($id);
-        return response()->json($book);
+        $payment = Payment::findOrFail($id);
+        return response()->json($payment);
     }
 
     /**
@@ -79,14 +74,9 @@ class BookController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $book = Book::findOrFail($id);
-        $book->title = $request->title;
-        $book->category_id = $request->category_id;
-        $book->author_id = $request->author_id;
-        $book->publisher_id = $request->publisher_id;
-        $book->stock = $request->stock;
-        $book->price = $request->price;
-        $book->save();
+        $payment = Payment::findOrFail($id);
+        $payment->name = $request->name;
+        $payment->save();
         return response()->json($request);
     }
 
@@ -98,8 +88,8 @@ class BookController extends Controller
      */
     public function destroy($id)
     {
-        $book = Book::findOrFail($id);
-        $book->delete();
-        return response()->json($book);
+        $payment = Payment::findOrFail($id);
+        $payment->delete();
+        return response()->json($payment);
     }
 }

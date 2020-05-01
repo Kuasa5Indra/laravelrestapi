@@ -21,3 +21,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::resource('authors', 'AuthorController')->except('create', 'edit');
 Route::resource('publishers', 'PublisherController')->except('create', 'edit');
 Route::resource('categories', 'BookCategoryController')->except('create', 'edit');
+Route::resource('payments', 'PaymentController')->except('create', 'edit');
+Route::resource('books', 'BookController')->except('create', 'edit');
