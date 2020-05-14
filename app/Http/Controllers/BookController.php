@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Book;
+use App\Http\Resources\BookResource;
 use Illuminate\Http\Request;
+use App\Http\Requests\BookRequest;
 
 class BookController extends Controller
 {
@@ -15,7 +17,7 @@ class BookController extends Controller
     public function index()
     {
         $books = Book::get();
-        return response()->json($books);
+        return BookResource::collection($books);
     }
 
     /**
@@ -34,8 +36,11 @@ class BookController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(BookRequest $request)
     {
+        $image = $request->file('image');
+        $fileName = time()."-".$image->getClientOriginalName();
+        $image->move('img/book_image', $fileName);
         $book = new Book;
         $book->title = $request->title;
         $book->category_id = $request->category_id;
@@ -43,8 +48,9 @@ class BookController extends Controller
         $book->publisher_id = $request->publisher_id;
         $book->stock = $request->stock;
         $book->price = $request->price;
+        $book->image = "img/book_image/".$fileName;
         $book->save();
-        return response()->json($request);
+        return new BookResource($book);
     }
 
     /**
@@ -56,7 +62,7 @@ class BookController extends Controller
     public function show($id)
     {
         $book = Book::findOrFail($id);
-        return response()->json($book);
+        return BookResource::collection($book);
     }
 
     /**
@@ -77,17 +83,22 @@ class BookController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(BookRequest $request, $id)
     {
         $book = Book::findOrFail($id);
+        unlink($book->image);
+        $image = $request->file('image');
+        $fileName = time()."-".$image->getClientOriginalName();
+        $image->move('img/book_image', $fileName);
         $book->title = $request->title;
         $book->category_id = $request->category_id;
         $book->author_id = $request->author_id;
         $book->publisher_id = $request->publisher_id;
         $book->stock = $request->stock;
         $book->price = $request->price;
+        $book->image = "img/book_image/".$fileName;
         $book->save();
-        return response()->json($request);
+        return new BookResource($book);
     }
 
     /**
@@ -99,7 +110,8 @@ class BookController extends Controller
     public function destroy($id)
     {
         $book = Book::findOrFail($id);
+        unlink($book->image);
         $book->delete();
-        return response()->json($book);
+        return new BookResource($book);
     }
 }

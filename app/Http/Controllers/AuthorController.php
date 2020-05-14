@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Author;
+use App\Http\Resources\AuthorResource;
 use Illuminate\Http\Request;
+use App\Http\Requests\AuthorRequest;
 
 class AuthorController extends Controller
 {
@@ -15,7 +17,7 @@ class AuthorController extends Controller
     public function index()
     {
         $authors = Author::get();
-        return response()->json($authors);
+        return AuthorResource::collection($authors);
     }
 
     /**
@@ -34,12 +36,12 @@ class AuthorController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(AuthorRequest $request)
     {
         $author = new Author;
         $author->name = $request->name;
         $author->save();
-        return response()->json($request);
+        return new AuthorResource($author);
     }
 
     /**
@@ -51,7 +53,7 @@ class AuthorController extends Controller
     public function show($id)
     {
         $author = Author::findOrFail($id);
-        return response()->json($author);
+        return AuthorResource::collection($author);
     }
 
     /**
@@ -72,12 +74,12 @@ class AuthorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(AuthorRequest $request, $id)
     {
         $author = Author::findOrFail($id);
         $author->name = $request->name;
         $author->save();
-        return response()->json($request);
+        return new AuthorResource($author);
     }
 
     /**
@@ -90,6 +92,6 @@ class AuthorController extends Controller
     {
         $author = Author::findOrFail($id);
         $author->delete();
-        return response()->json($author);
+        return new AuthorResource($author);
     }
 }

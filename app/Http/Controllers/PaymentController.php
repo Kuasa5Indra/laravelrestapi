@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PaymentResource;
 use App\Payment;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,7 @@ class PaymentController extends Controller
     public function index()
     {
         $payments = Payment::get();
-        return response()->json($payments);
+        return PaymentResource::collection($payments);
     }
 
     /**
@@ -39,7 +40,7 @@ class PaymentController extends Controller
         $payment = new Payment;
         $payment->name = $request->name;
         $payment->save();
-        return response()->json($request);
+        return new PaymentResource($payment);
     }
 
     /**
@@ -51,7 +52,7 @@ class PaymentController extends Controller
     public function show($id)
     {
         $payment = Payment::findOrFail($id);
-        return response()->json($payment);
+        return PaymentResource::collection($payment);
     }
 
     /**
@@ -77,7 +78,7 @@ class PaymentController extends Controller
         $payment = Payment::findOrFail($id);
         $payment->name = $request->name;
         $payment->save();
-        return response()->json($request);
+        return new PaymentResource($payment);
     }
 
     /**
@@ -90,6 +91,6 @@ class PaymentController extends Controller
     {
         $payment = Payment::findOrFail($id);
         $payment->delete();
-        return response()->json($payment);
+        return new PaymentResource($payment);
     }
 }

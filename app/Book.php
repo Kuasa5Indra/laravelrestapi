@@ -13,7 +13,8 @@ class Book extends Model
         'author_id',
         'publisher_id',
         'stock',
-        'price'
+        'price',
+        'image'
     ];
     protected $guarded = [
         'created_at',

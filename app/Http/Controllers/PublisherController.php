@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PublisherResource;
 use App\Publisher;
 use Illuminate\Http\Request;
+use App\Http\Requests\PublisherRequest;
 
 class PublisherController extends Controller
 {
@@ -15,7 +17,7 @@ class PublisherController extends Controller
     public function index()
     {
         $publishers = Publisher::get();
-        return response()->json($publishers);
+        return PublisherResource::collection($publishers);
     }
 
     /**
@@ -34,12 +36,12 @@ class PublisherController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PublisherRequest $request)
     {
         $publisher = new Publisher;
         $publisher->name = $request->name;
         $publisher->save();
-        return response()->json($request);
+        return new PublisherResource($publisher);
     }
 
     /**
@@ -51,7 +53,7 @@ class PublisherController extends Controller
     public function show($id)
     {
         $publisher = Publisher::findOrFail($id);
-        return response()->json($publisher);
+        return PublisherResource::collection($publisher);
     }
 
     /**
@@ -72,12 +74,12 @@ class PublisherController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PublisherRequest $request, $id)
     {
         $publisher = Publisher::findOrFail($id);
         $publisher->name = $request->name;
         $publisher->save();
-        return response()->json($request);
+        return new PublisherResource($publisher);
     }
 
     /**
@@ -90,6 +92,6 @@ class PublisherController extends Controller
     {
         $publisher = Publisher::findOrFail($id);
         $publisher->delete();
-        return response()->json($publisher);
+        return new PublisherResource($publisher);
     }
 }

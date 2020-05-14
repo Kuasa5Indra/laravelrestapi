@@ -21,6 +21,7 @@ class CreateBookTable extends Migration
             $table->foreignId('publisher_id')->constrained('publisher');
             $table->integer('stock');
             $table->integer('price');
+            $table->string('image');
             $table->timestamps();
         });
     }

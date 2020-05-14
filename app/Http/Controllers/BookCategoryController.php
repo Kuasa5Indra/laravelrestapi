@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\BookCategory;
+use App\Http\Resources\BookCategoryResource;
 use Illuminate\Http\Request;
+use App\Http\Requests\BookCategoryRequest;
 
 class BookCategoryController extends Controller
 {
@@ -15,7 +17,7 @@ class BookCategoryController extends Controller
     public function index()
     {
         $categories = BookCategory::get();
-        return response()->json($categories);
+        return BookCategoryResource::collection($categories);
     }
 
     /**
@@ -34,12 +36,12 @@ class BookCategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(BookCategoryRequest $request)
     {
         $category = new BookCategory;
         $category->name = $request->name;
         $category->save();
-        return response()->json($request);
+        return new BookCategoryResource($category);
     }
 
     /**
@@ -51,7 +53,7 @@ class BookCategoryController extends Controller
     public function show($id)
     {
         $category = BookCategory::findOrFail($id);
-        return response()->json($category);
+        return BookCategoryResource::collection($category);
     }
 
     /**
@@ -72,12 +74,12 @@ class BookCategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(BookCategoryRequest $request, $id)
     {
         $category = BookCategory::findOrFail($id);
         $category->name = $request->name;
         $category->save();
-        return response()->json($request);
+        return new BookCategoryResource($category);
     }
 
     /**
@@ -90,6 +92,6 @@ class BookCategoryController extends Controller
     {
         $category = BookCategory::findOrFail($id);
         $category->delete();
-        return response()->json($category);
+        return new BookCategoryResource($category);
     }
 }

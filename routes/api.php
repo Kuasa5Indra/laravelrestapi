@@ -18,8 +18,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::resource('authors', 'AuthorController')->except('create', 'edit');
-Route::resource('publishers', 'PublisherController')->except('create', 'edit');
-Route::resource('categories', 'BookCategoryController')->except('create', 'edit');
-Route::resource('payments', 'PaymentController')->except('create', 'edit');
-Route::resource('books', 'BookController')->except('create', 'edit');
+Route::apiResource('authors', 'AuthorController');
+Route::apiResource('publishers', 'PublisherController');
+Route::apiResource('categories', 'BookCategoryController');
+Route::apiResource('payments', 'PaymentController');
+Route::apiResource('books', 'BookController');
